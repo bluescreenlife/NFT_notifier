@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
+import requests
 from time import sleep
 import smtplib
 from dotenv import load_dotenv
@@ -70,12 +72,33 @@ class OrdinalSaleNotifier:
 
         else:
             pass
+    
+    def check_offer(self):
+        # driver = self.webdriver_init()
+        me_url = "https://magiceden.io/ordinals/item-details/50d94da52f212d6c5bb5be87389aa3f9824985405e120ff064b17890270d079ci0"
+        response = requests.get(me_url)
+        html = response.text
+        soup = BeautifulSoup(html, "html.parser")
+        elements = soup.find("tr", style="overflow-anchor: none;")
+        top = elements[1]
+        print(top)
+
+def check_offer():
+        # driver = self.webdriver_init()
+        me_url = "https://magiceden.io/ordinals/item-details/50d94da52f212d6c5bb5be87389aa3f9824985405e120ff064b17890270d079ci0"
+        response = requests.get(me_url)
+        html = response.text
+        soup = BeautifulSoup(html, "html.parser")
+        elements = soup.find_all("div", class_="tw-relative tw-overflow-hidden")
+        print(html)
 
 if __name__ == "__main__":
-    notifier = OrdinalSaleNotifier()
+    # notifier = OrdinalSaleNotifier()
 
-    while True:
-        sleep(10)
-        check = notifier.check_listings()
-        if check:
-            notifier.send_email()
+    # while True:
+    #     sleep(10)
+    #     check = notifier.check_listings()
+    #     if check:
+    #         notifier.send_email()
+
+    check_offer()
